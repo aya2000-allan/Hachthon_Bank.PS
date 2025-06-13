@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>لوحة تحليل المشاعر - بنك فلسطين</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.rtl.min.css" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+  <link rel="stylesheet" href="style.css">
+ 
+</head>
+<body>
+  <div class="container py-4">
+    <div class="header">
+      لوحة تحليل مشاعر المحادثات
+    </div>
+    <!-- KPIs -->
+<div class="row mb-4 text-center">
+<div class="col-md-4 mb-3">
+    <div class="card shadow-sm p-3">
+      <h5>عدد المحادثات اليوم</h5>
+      <h3 id="todayCount" class="fs-3 fw-bold">213</h3>
+    </div>
+  </div>
+
+  <!-- المحادثات التي تم الرد عليها -->
+  <div class="col-md-4 mb-3">
+    <div class="card shadow-sm p-3">
+      <h5>المحادثات التي تم الرد عليها</h5>
+      <h3 id="repliedCount" class="text-read fs-3 fw-bold">0</h3>
+    </div>
+  </div>
+
+  <!-- المحادثات التي لم يتم الرد عليها -->
+  <div class="col-md-4 mb-3">
+    <div class="card shadow-sm p-3">
+      <h5>المحادثات التي لم يتم الرد عليها</h5>
+      <h3 id="unrepliedCount" class="text-primary fs-3 fw-bold">0</h3>
+    </div>
+  </div>
+  <!-- الرسائل الإيجابية ونسبتها -->
+  <div class="col-md-6 mb-3">
+    <div class="card shadow-sm p-3">
+      <h5>الرسائل الإيجابية</h5>
+      <h3 class="text-success fs-3 fw-bold">100</h3>
+    </div>
+  </div>
+  <div class="col-md-6 mb-3"  id="sentimentCards">
+  <div class="card shadow-sm p-3 cursor-pointer sentiment-card" data-sentiment="إيجابي" >
+      <h5>نسبة الإيجابية</h5>
+      <h3 class="text-success fs-3 fw-bold">47%</h3>
+    </div>
+  </div>
+
+  <!-- الرسائل السلبية ونسبتها -->
+  <div class="col-md-6 mb-3"  id="sentimentCards">
+    <div class="card shadow-sm p-3">
+      <h5>الرسائل السلبية</h5>
+      <h3 class="text-danger fs-3 fw-bold">27</h3>
+    </div>
+  </div>
+  <div class="col-md-6 mb-3" id="sentimentCards">
+  <div class="card shadow-sm p-3 cursor-pointer sentiment-card" data-sentiment="سلبي">
+      <h5>نسبة السلبية</h5>
+      <h3 class="text-danger fs-3 fw-bold">12.7%</h3>
+    </div>
+  </div>
+
+   <!-- الرسائل المحايده ونسبتها -->
+  <div class="col-md-6 mb-3">
+    <div class="card shadow-sm p-3">
+      <h5>الرسائل المحايدة</h5>
+      <h3 class=" text-neutral fs-3 fw-bold">80</h3>
+    </div>
+  </div>
+  <div class="col-md-6 mb-3">
+  <div class="card shadow-sm p-3 cursor-pointer sentiment-card" data-sentiment="محايد">
+      <h5>نسبة المحايدة</h5>
+      <h3 class="text-neutral fs-3 fw-bold">40.3%</h3>
+    </div>
+  </div>
+</div>
+
+    <!-- Filter -->
+    <div class="mb-4 d-flex align-items-center gap-3">
+      <label for="sentimentFilter" class="form-label mb-0 fw-semibold">تصفية حسب نوع المشاعر:</label>
+      <select id="sentimentFilter" class="form-select w-auto">
+        <option value="">كل المشاعر</option>
+        <option value="إيجابي">إيجابي</option>
+        <option value="سلبي">سلبي</option>
+        <option value="محايد">محايد</option>
+         <option value="التي تم الرد عليها">التي تم الرد عليها</option>
+          <option value="التي لم يتم الرد عليها">التي لم يتم الرد عليها</option>
+      </select>
+    </div>
+
+    <!-- Loading -->
+    <div id="loading" class="text-center my-4">
+      <div class="spinner-border text-primary" role="status"></div>
+      <div>جاري التحميل...</div>
+    </div>
+
+    <!-- Conversation list -->
+    <div class="row">
+  <div class="col-md-12 mx-auto mb-4">
+    <div class="card shadow-sm">
+      <div class="card-header">قائمة المحادثات</div>
+      <ul class="list-group list-group-flush" id="conversation-list">
+        <!-- JS will populate here -->
+      </ul>
+    </div>
+  </div>
+   <!-- Modal -->
+  <div class="modal fade" id="conversationModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">تفاصيل المحادثة</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="إغلاق"></button>
+        </div>
+        <div class="modal-body" id="modalContent">
+          <!-- JS will populate -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- كرت تحليل الشعور -->
+<div class="row" id="chartSection">
+  <div class="col-md-12 mx-auto mb-4">
+    <div class="card shadow-sm">
+      <div class="card-header text-center fw-bold">تحليل الشعور</div>
+      <div class="card-body">
+        <div class="d-flex flex-column flex-md-row justify-content-center align-items-center gap-3 mb-3">
+          <select id="sentimentSelect" class="form-select w-100 w-md-auto" style="max-width: 200px;">
+            <option value="إيجابي">إيجابي</option>
+            <option value="سلبي">سلبي</option>
+            <option value="محايد">محايد</option>
+          </select>
+
+          <select id="rangeSelect" class="form-select w-100 w-md-auto" style="max-width: 200px;">
+            <option value="7">آخر 7 أيام</option>
+            <option value="30">آخر 30 يوم</option>
+            <option value="365">آخر سنة</option>
+          </select>
+        </div>
+        <canvas id="sentimentChart" height="100"></canvas>
+      </div>
+    </div>
+  </div>
+</div>
+
+  
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="script.js"></script>
+<script src="script2.js"></script>
+<script src="script3.js"></script>
+
+
+</body>
+</html>
