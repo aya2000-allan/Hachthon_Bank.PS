@@ -151,7 +151,7 @@ function openModalFiltered(index) {
 
       <button class="btn" style="background-color: #6c757d; border-color: #6c757d; color: white;" onclick="sendReplyFiltered(${index})">إرسال</button>
     </div>
-  ` : `<div class="alert mt-4" style="background-color:#9b2677; color:#ffffff;">تم الرد على هذه المحادثة بالفعل.</div>`;
+  ` : `<div class="alert mt-4" style="background-color:#ff1169; color:#ffffff;">تم الرد على هذه المحادثة بالفعل.</div>`;
 
   const closeButton = `
     <div class="text-end mt-4">
